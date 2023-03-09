@@ -42,9 +42,6 @@ export default function Register({ navigation }) {
     Parse.initialize('s6GYQMjZMVjWpqxwNA4qqpP8YdPof9koELoA9Hds', '2PeFEOihX2OlZGwTSjy7wFfC7nFPU6FCbyGSWd6p');
     Parse.serverURL = 'https://parseapi.back4app.com'
 
-
-
-
     async function createUser() {
         AsyncStorage.clear();
         // Note that these values come from state variables that we've declared before
@@ -86,9 +83,6 @@ export default function Register({ navigation }) {
             Alert.alert("Erro", "Verifique os campos")
         }
     }
-
-
-
 
 return (
     <View style={styles.container}>

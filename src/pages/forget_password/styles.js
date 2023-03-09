@@ -5,7 +5,7 @@ const {height, width} = Dimensions.get("screen")
 export default StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: 'white'
     },
     logo:{
         width: '40%',
