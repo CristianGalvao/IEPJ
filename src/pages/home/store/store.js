@@ -18,19 +18,19 @@ export default function Store() {
 
   const [data_store, set_data_store] = useState()
 
-  useEffect(
-    () => {
-      async function get_product() {
-        await fetch('http://192.168.1.106:3000/price_product')
-          .then(res => res.json())
-          .then(res => {
-            set_data_store(res[0])
-          })
-        console.log(data_store)
-      }
-      get_product()
-    }, []
-  )
+  // useEffect(
+  //   () => {
+  //     async function get_product() {
+  //       await fetch('http://192.168.1.106:3000/price_product')
+  //         .then(res => res.json())
+  //         .then(res => {
+  //           set_data_store(res[0])
+  //         })
+  //       console.log(data_store)
+  //     }
+  //     get_product()
+  //   }, []
+  // )
 
   return (
     <View style={{flex: 1, backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>

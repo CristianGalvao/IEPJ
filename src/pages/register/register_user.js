@@ -1,9 +1,9 @@
-import React, { FC, ReactElement, useEffect, useState } from "react";
-import { View, Image, TextInput, ScrollView, Alert, Text, TouchableOpacity, Button } from 'react-native';
+import React, { useState } from "react";
+import { View, Image, TextInput, ScrollView, Alert, Text, TouchableOpacity } from 'react-native';
 import styles from "./styles";
 import one_heart_img from './logo_one_heart.png';
 import { TextInputMask } from "react-native-masked-text";
-import { hash } from "bcryptjs";
+// import { hash } from "bcryptjs";
 import Parse from "parse/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackActions } from '@react-navigation/native';
@@ -11,7 +11,6 @@ import { StackActions } from '@react-navigation/native';
 
 
 export default function Register({ navigation }) {
-
 
     // DECLARANDO CONSTANTES
     const [name, setName] = useState('');

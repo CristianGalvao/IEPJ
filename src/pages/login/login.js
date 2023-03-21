@@ -5,7 +5,6 @@ import {
     View,
     TextInput,
     Image,
-    Dimensions,
     TouchableOpacity,
     TouchableWithoutFeedback,
     Keyboard,
@@ -18,7 +17,6 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import auth from '@react-native-firebase/auth';
 import Parse from "parse/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StackActions } from '@react-navigation/native';
 
 export default function Login({ navigation }) {
 
@@ -40,12 +38,15 @@ export default function Login({ navigation }) {
                 // To verify that this is in fact the current user, currentAsync can be used
                 const currentUser = await Parse.User.currentAsync();
                 console.log(loggedInUser === currentUser);
+                console.log(currentUser)
                 navigation.navigate('tabbar')
-                return true;
+                let json = currentUser;
+                await AsyncStorage.setItem('data_user', JSON.stringify(json));
             })
-            .catch((error) => {
+            .catch( (error) => {
                 // Error can be caused by wrong parameters or lack of Internet connection
                 Alert.alert('Error!', error.message);
+                AsyncStorage.clear()
                 return false;
             });
     }
@@ -60,11 +61,13 @@ export default function Login({ navigation }) {
         await GoogleSignin.hasPlayServices();
         const { idToken } = await GoogleSignin.signIn();
         const userInfo = await GoogleSignin.signIn();
-        var name_user = userInfo.user.name
-        navigation.navigate('tabbar', { user: name_user });
+        console.log(userInfo.user)
         // Create a Google credential with the token
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
+        let json = userInfo.user;
+        await AsyncStorage.setItem('data_user', JSON.stringify(json));
+        navigation.navigate('home')
+        await AsyncStorage.clear()
         // Sign-in the user with the credential
         return auth().signInWithCredential(googleCredential);
     }
