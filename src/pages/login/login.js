@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
     Alert,
     Text,
@@ -15,40 +15,47 @@ import styles from './styles';
 import logoGoogle from './google.jpg';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import Parse from "parse/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {BASE_URL} from '../../config/config'
 
 export default function Login({ navigation }) {
-
-    Parse.setAsyncStorage(AsyncStorage);
-    const PARSE_APPLICATION_ID = 's6GYQMjZMVjWpqxwNA4qqpP8YdPof9koELoA9Hds';
-    const PARSE_HOST_URL = 'https://parseapi.back4app.com';
-    const PARSE_JAVASCRIPT_ID = '2PeFEOihX2OlZGwTSjy7wFfC7nFPU6FCbyGSWd6p';
-    Parse.initialize(PARSE_APPLICATION_ID, PARSE_JAVASCRIPT_ID);
-    Parse.serverURL = PARSE_HOST_URL;
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     async function Login_User() {
-        return await Parse.User.logIn(email, password)
-            .then(async (loggedInUser) => {
-                // logIn returns the corresponding ParseUser object
-          
-                // To verify that this is in fact the current user, currentAsync can be used
-                const currentUser = await Parse.User.currentAsync();
-                console.log(loggedInUser === currentUser);
-                console.log(currentUser)
-                navigation.navigate('tabbar')
-                let json = currentUser;
-                await AsyncStorage.setItem('data_user', JSON.stringify(json));
-            })
-            .catch( (error) => {
-                // Error can be caused by wrong parameters or lack of Internet connection
-                Alert.alert('Error!', error.message);
-                AsyncStorage.clear()
-                return false;
-            });
+        const response = await fetch(`${BASE_URL}/user/login`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            }),
+        });
+
+        let json = await response.json();
+
+        if(json == 'user_not_found'){
+            Alert.alert("Erro", "Usuário não encontrado")
+        }
+
+        if(json == "verify_email"){
+            Alert.alert("Por favor", "Verifique seu e-mail")
+        }
+        
+        if(json == 'error_login'){
+            Alert.alert("Erro", "erro ao fazer login")
+        }
+
+        if (json.status == 1) {
+            console.log(json.status)
+            await AsyncStorage.setItem('data_user', JSON.stringify(json));
+            navigation.navigate("tabbar");
+        }
+
     }
 
     //   LOGIN GOOGLE
@@ -66,10 +73,11 @@ export default function Login({ navigation }) {
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
         let json = userInfo.user;
         await AsyncStorage.setItem('data_user', JSON.stringify(json));
-        navigation.navigate('home')
-        await AsyncStorage.clear()
+        navigation.navigate('tabbar')
         // Sign-in the user with the credential
         return auth().signInWithCredential(googleCredential);
+
+
     }
 
 
@@ -115,8 +123,8 @@ export default function Login({ navigation }) {
                             onChangeText={setPassword}
                         />
                     </View>
-                    <Text onPress={()=>navigation.navigate('reset')} style={styles.fpText}>Esqueceu a senha?</Text>
-                    <TouchableOpacity onPress={()=>{Login_User()}} style={styles.loginButton}>
+                    <Text onPress={() => navigation.navigate('reset')} style={styles.fpText}>Esqueceu a senha?</Text>
+                    <TouchableOpacity onPress={() => { Login_User() }} style={styles.loginButton}>
                         <Text style={styles.loginButtonText}>Login</Text>
                     </TouchableOpacity>
                     <Text onPress={() => navigation.navigate('register')} style={styles.registerText}>

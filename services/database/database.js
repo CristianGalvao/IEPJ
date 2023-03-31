@@ -1,10 +1,11 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 const con = mysql.createConnection({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
     password: '',
     database: 'oneheart',
+    port: 3307
 });
 
 con.connect(function(err) {
@@ -13,3 +14,4 @@ con.connect(function(err) {
 });
 
 module.exports = con
+
