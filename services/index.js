@@ -17,6 +17,9 @@ app.use('/', create_user);
 const login_user = require("./controller/user_controller/login_user_controller")
 app.use('/', login_user);
 
+const reset_password = require("./controller/user_controller/reset_password_controller")
+app.use('/', reset_password);
+
 const port = process.env.PORT || 3000
 
 app.listen(port, ()=>{

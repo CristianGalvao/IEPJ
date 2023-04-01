@@ -47,7 +47,7 @@ export default function Login({ navigation }) {
         }
         
         if(json == 'error_login'){
-            Alert.alert("Erro", "erro ao fazer login")
+            Alert.alert("Erro", "Verifique sua senha")
         }
 
         if (json.status == 1) {
@@ -72,6 +72,7 @@ export default function Login({ navigation }) {
         // Create a Google credential with the token
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
         let json = userInfo.user;
+        
         await AsyncStorage.setItem('data_user', JSON.stringify(json));
         navigation.navigate('tabbar')
         // Sign-in the user with the credential

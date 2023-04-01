@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import {
-    StyleSheet,
+    TouchableOpacity,
     Text,
     View,
     ScrollView,
     Alert,
     Image,
-    Dimensions,
+    TextInput,
 } from 'react-native';
 
 import styles from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
-
+import { Icon } from 'react-native-elements';
 
 
 export default function ProfileScreen1() {
 
     const [name_user, setName_user] = useState('');
-    const [user_photo, setUser_photo] = useState('');
+    const [email, setEmail] = useState('');
     const [image, setImage] = useState('');
-    const [id_user, setId_user] = useState('');
-    const [readResults,setReadResults] = useState('')
 
     useEffect(
         () => {
@@ -30,6 +28,7 @@ export default function ProfileScreen1() {
                 let json = JSON.parse(value);
                 await setImage(json.photo)
                 setName_user(json.name)
+                setEmail(json.email)
             }
             get_user_by_login();
         }, []);
@@ -81,6 +80,62 @@ export default function ProfileScreen1() {
                             <View style={styles.nameAndBioView}>
                                 <Text style={styles.userFullName}>{name_user}</Text>
                                 <Text style={styles.userBio}>{'Verique aqui seus dados'}</Text>
+                            </View>
+
+                            <View style={{ width: '90%', marginLeft: "5%", padding: 10, marginTop: '8%' }}>
+
+                                <ScrollView>
+
+                                <View style={styles.searchSection}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Nome"
+                                        onChangeText={(searchString) => { this.setState({ searchString }) }}
+                                        underlineColorAndroid="transparent"
+                                        value={name_user}
+                                    />
+                                </View>
+
+                                <View style={styles.searchSection}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Email"
+                                        value={email}
+                                        onChangeText={(searchString) => { this.setState({ searchString }) }}
+                                        underlineColorAndroid="transparent"
+                                    />
+                                </View>
+
+                                <View style={styles.searchSection}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Senha"
+                                        onChangeText={(searchString) => { this.setState({ searchString }) }}
+                                        underlineColorAndroid="transparent"
+                                    />
+                                </View>
+
+                                <View style={styles.searchSection}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="CPF"
+                                        onChangeText={(searchString) => { this.setState({ searchString }) }}
+                                        underlineColorAndroid="transparent"
+                                    />
+                                </View>
+
+                                <View style={styles.searchSection}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Telefone"
+                                        onChangeText={(searchString) => { this.setState({ searchString }) }}
+                                        underlineColorAndroid="transparent"
+                                    />
+                                </View>
+
+                                
+                                </ScrollView>
+
                             </View>
 
                         </View>

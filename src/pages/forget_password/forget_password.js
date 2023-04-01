@@ -2,34 +2,45 @@ import React, {useState, useEffect} from "react";
 import {View, Text, Image, TextInput, TouchableOpacity, Alert} from 'react-native';
 import styles from './styles';
 import logo_email from './img_logo_email.png';
-import Parse from "parse/react-native";
+import { BASE_URL } from "../../config/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Reset({navigation}){
 
-    Parse.setAsyncStorage(AsyncStorage);
-    Parse.initialize('s6GYQMjZMVjWpqxwNA4qqpP8YdPof9koELoA9Hds', '2PeFEOihX2OlZGwTSjy7wFfC7nFPU6FCbyGSWd6p');
-    Parse.serverURL = 'https://parseapi.back4app.com'
-    
     const [email, setEmail] = useState();
 
+      // FUNÇÃO VALIDAR EMAIL
+    isEmailValid = () => {
+        let pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        return pattern.test(String(email).toLowerCase())
+    }
+
     async function passwordReset() {
-        // Note that this value come from state variables linked to your text input
-        const emailValue = email;
-        return await Parse.User.requestPasswordReset(emailValue)
-          .then(() => {
-            // logIn returns the corresponding ParseUser object
-            Alert.alert(
-             'Sucesso',
-             `Foi enviado um e-mail ${email}, verifique e altere sua senha`
-            );
-           return navigation.navigate("login")
-          })
-          .catch((error) => {
-            // Error can be caused by lack of Internet connection
-            Alert.alert('Error!', error.message);
-            return false;
-          });
+        if(isEmailValid){
+          const response = await fetch(`${BASE_URL}/user/reset_password`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+            }),
+        });
+
+        let json = await response.json();
+        if (json === 'password_updated') {
+          Alert.alert("Enviado!", "Verifique seu e-mail com sua nova senha")
+          navigation.navigate("login")
+        }else{
+          Alert.alert("Erro", "Verifique seu e-mail")
+        }
+
+
+        }else{
+          Alert.alert("Erro", "Verifique campo e-mail")
+        }
+
       };
 
     return(

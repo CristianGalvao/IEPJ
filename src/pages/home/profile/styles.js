@@ -64,4 +64,27 @@ export default StyleSheet.create({
       fontFamily: 'SSRegular',
       fontSize: 18,
     },
+    searchSection: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#fff',
+  },
+  searchIcon: {
+      padding: 10,
+  },
+  input: {
+      width: '100%',
+      paddingTop: 10,
+      paddingRight: 10,
+      paddingBottom: 10,
+      paddingLeft: 0,
+      backgroundColor: '#fff',
+      borderBottomWidth: 1,
+      borderColor: 'black',
+      borderRadius: 7,
+      color: '#424242',
+      marginTop: '10%'
+  },
 })
