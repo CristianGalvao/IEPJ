@@ -4,7 +4,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 //Importando as telas
 import Store from "../pages/home/store/store";
-import Profile from "../pages/home/profile/profile";
+// import Profile from "../pages/home/profile/profile";
+import Config_Screen from "../pages/home/config_screen/config_screen";
 import Events from "../pages/home/Events/events";
 import Home from "../pages/home/home/home";
 import Eden from '../pages/home/eden/eden';
@@ -55,8 +56,8 @@ export default function TabBar() {
 
             }}></Tab.Screen>
 
-            <Tab.Screen name="profile" component={Profile} options={{
-                headerShown: false, title: "Perfil",
+            <Tab.Screen name="config_screen" component={Config_Screen} options={{
+                headerShown: false, title: "Ajustes",
 
                 tabBarIcon: ({ color, size }) => (<Entypo name="user" size={size} color={color} />)
 

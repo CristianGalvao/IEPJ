@@ -20,6 +20,9 @@ app.use('/', login_user);
 const reset_password = require("./controller/user_controller/reset_password_controller")
 app.use('/', reset_password);
 
+const update_photo = require("./controller/user_controller/update_photo_controller");
+app.use('/', update_photo)
+
 const port = process.env.PORT || 3000
 
 app.listen(port, ()=>{

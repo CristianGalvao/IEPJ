@@ -87,4 +87,22 @@ export default StyleSheet.create({
       color: '#424242',
       marginTop: '10%'
   },
+
+  btn_save:{
+    marginTop: '10%',
+    width: '100%',
+    height: '9%',
+    backgroundColor: 'red',
+    marginBottom: '10%',
+    borderRadius: 20,
+    padding: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  txt_btn_save:{
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16
+  }
 })

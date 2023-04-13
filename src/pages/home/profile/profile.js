@@ -14,21 +14,38 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { Icon } from 'react-native-elements';
 
+import { BASE_URL } from '../../../config/config';
+
 
 export default function ProfileScreen1() {
 
     const [name_user, setName_user] = useState('');
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState(null);
     const [image, setImage] = useState('');
+    const [password, setPassword] = useState('');
+    const [telefone, setTelefone] = useState('');
+    const [cpf, setCpf] = useState("");
+    const [button_save, setButton_save] = useState(false);
+    const [disable_field, setDisableField] = useState(false)
+
+    function show_button_save() {
+        setButton_save(!button_save)
+        setDisableField(!disable_field)
+    }
 
     useEffect(
         () => {
             async function get_user_by_login() {
+
                 const value = await AsyncStorage.getItem('data_user');
                 let json = JSON.parse(value);
                 await setImage(json.photo)
                 setName_user(json.name)
                 setEmail(json.email)
+                setPassword(json.password)
+                setCpf(json.cpf);
+                setTelefone(json.whatssap);
+
             }
             get_user_by_login();
         }, []);
@@ -41,7 +58,18 @@ export default function ProfileScreen1() {
             quality: 1,
         });
 
-        console.log(result)
+        setImage(result.uri)
+
+        fetch(`${BASE_URL}/user/update_photo/${email}/${image}`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                photo: image
+            }),
+        });
     };
 
     useEffect(
@@ -52,6 +80,20 @@ export default function ProfileScreen1() {
                 console.log(image)
             }
         }, [image])
+
+    async function update_fields() {
+        fetch(BASE_URL, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                firstParam: 'yourValue',
+                secondParam: 'yourOtherValue',
+            }),
+        });
+    }
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -73,8 +115,12 @@ export default function ProfileScreen1() {
                                     source={{
                                         uri: image,
                                     }}
+
+                        
                                 />
                             </View>
+
+                            <Icon name='edit' onPress={addImage}/>
 
                             {/* Profile Name and Bio */}
                             <View style={styles.nameAndBioView}>
@@ -82,58 +128,82 @@ export default function ProfileScreen1() {
                                 <Text style={styles.userBio}>{'Verique aqui seus dados'}</Text>
                             </View>
 
+
                             <View style={{ width: '90%', marginLeft: "5%", padding: 10, marginTop: '8%' }}>
+
+                                {/* BUTTON EDIT */}
+                                <View style={{ width: '100%', alignItems: 'flex-end', display: 'flex', height: 'auto' }}>
+                                    <Icon name='edit' color={'red'} size={30} style={{ textAlign: 'right' }} onPress={() => show_button_save()} />
+                                </View>
 
                                 <ScrollView>
 
-                                <View style={styles.searchSection}>
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Nome"
-                                        onChangeText={(searchString) => { this.setState({ searchString }) }}
-                                        underlineColorAndroid="transparent"
-                                        value={name_user}
-                                    />
-                                </View>
+                                    <View style={styles.searchSection}>
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="Nome"
+                                            // onChangeText={(searchString) => { this.setState({ searchString }) }}
+                                            underlineColorAndroid="transparent"
+                                            value={name_user}
+                                            editable={disable_field}
+                                        />
+                                    </View>
 
-                                <View style={styles.searchSection}>
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Email"
-                                        value={email}
-                                        onChangeText={(searchString) => { this.setState({ searchString }) }}
-                                        underlineColorAndroid="transparent"
-                                    />
-                                </View>
+                                    <View style={styles.searchSection}>
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="Email"
+                                            value={email}
+                                            // onChangeText={(searchString) => { this.setState({ searchString }) }}
+                                            underlineColorAndroid="transparent"
+                                            editable={false}
+                                        />
+                                    </View>
 
-                                <View style={styles.searchSection}>
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Senha"
-                                        onChangeText={(searchString) => { this.setState({ searchString }) }}
-                                        underlineColorAndroid="transparent"
-                                    />
-                                </View>
+                                    <View style={styles.searchSection}>
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="Senha"
+                                            onChangeText={(searchString) => { this.setState({ searchString }) }}
+                                            underlineColorAndroid="transparent"
+                                            editable={disable_field}
 
-                                <View style={styles.searchSection}>
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="CPF"
-                                        onChangeText={(searchString) => { this.setState({ searchString }) }}
-                                        underlineColorAndroid="transparent"
-                                    />
-                                </View>
+                                        />
+                                    </View>
 
-                                <View style={styles.searchSection}>
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Telefone"
-                                        onChangeText={(searchString) => { this.setState({ searchString }) }}
-                                        underlineColorAndroid="transparent"
-                                    />
-                                </View>
+                                    <View style={styles.searchSection}>
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="CPF"
+                                            // onChangeText={(searchString) => { this.setState({ searchString }) }}
+                                            underlineColorAndroid="transparent"
+                                            editable={false}
+                                            value={cpf}
+                                        />
+                                    </View>
 
-                                
+                                    <View style={styles.searchSection}>
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="Telefone"
+                                            // onChangeText={(searchString) => { this.setState({ searchString }) }}
+                                            underlineColorAndroid="transparent"
+                                            editable={disable_field}
+                                            value={telefone}
+                                        />
+                                    </View>
+
+                                    {button_save == false ? null :
+
+                                        <TouchableOpacity style={styles.btn_save}>
+
+                                            <Text style={styles.txt_btn_save}>Salvar</Text>
+
+                                        </TouchableOpacity>
+
+                                    }
+
+
                                 </ScrollView>
 
                             </View>
