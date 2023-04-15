@@ -9,6 +9,7 @@ import Login from '../pages/login/login';
 import Home from '../pages/home/home/home';
 import Register from '../pages/register/register_user'
 import Reset from "../pages/forget_password/forget_password";
+import Profile from '../pages/home/profile/profile';
 
 // IMPORTANDO TABBAR
 import TabBar from "../tabBar/routesTabBar";
@@ -27,6 +28,7 @@ export default function Navigation() {
                 <Stack.Screen name="tabbar" component={TabBar} options={{headerShown: false}}/>
                 <Stack.Screen name="register" component={Register} options={{headerTitle: ''}}/>
                 <Stack.Screen name="reset" component={Reset} options={{headerTitle: ''}}/>
+                <Stack.Screen name="profile" component={Profile} options={{headerTitle: ''}}/>
 
 
             </Stack.Navigator>

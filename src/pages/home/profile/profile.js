@@ -8,6 +8,9 @@ import {
     Image,
     TextInput,
 } from 'react-native';
+import { LogBox } from "react-native"
+
+LogBox.ignoreAllLogs(true)
 
 import styles from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,13 +23,14 @@ import { BASE_URL } from '../../../config/config';
 export default function ProfileScreen1() {
 
     const [name_user, setName_user] = useState('');
-    const [email, setEmail] = useState(null);
-    const [image, setImage] = useState('');
+    const [email, setEmail] = useState('')
+    const [image, setImage] = useState();
     const [password, setPassword] = useState('');
     const [telefone, setTelefone] = useState('');
     const [cpf, setCpf] = useState("");
     const [button_save, setButton_save] = useState(false);
-    const [disable_field, setDisableField] = useState(false)
+    const [disable_field, setDisableField] = useState(false);
+    const [login_by, setLoginBy] = useState();
 
     function show_button_save() {
         setButton_save(!button_save)
@@ -45,10 +49,13 @@ export default function ProfileScreen1() {
                 setPassword(json.password)
                 setCpf(json.cpf);
                 setTelefone(json.whatssap);
-
+                setImage(json.photo)
+                setLoginBy(json.login_by)
             }
             get_user_by_login();
-        }, []);
+        }, [image]);
+
+  
 
     const addImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -72,14 +79,6 @@ export default function ProfileScreen1() {
         });
     };
 
-    useEffect(
-        () => {
-            if (image === 'undefined' || image === undefined || image === null) {
-                setImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAfzeD80cGELjuFc9oC7i3KJG_cw6R-y-F3sH7WVm9uOxu8CQ_XGkqZVx0ctgI2N52Dn0&usqp=CAU')
-            } else {
-                console.log(image)
-            }
-        }, [image])
 
     async function update_fields() {
         fetch(BASE_URL, {
@@ -94,6 +93,8 @@ export default function ProfileScreen1() {
             }),
         });
     }
+
+
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -110,17 +111,18 @@ export default function ProfileScreen1() {
                         <View>
                             {/* Profile Image */}
                             <View style={styles.profileImageView}>
-                                <Image
-                                    style={styles.profileImage}
-                                    source={{
-                                        uri: image,
-                                    }}
 
-                        
-                                />
+                            <Image
+                                        style={styles.profileImage}
+                                        source={{
+                                            uri: image,
+                                        }}
+                                    />
+                                
+
                             </View>
 
-                            <Icon name='edit' onPress={addImage}/>
+                            <Icon name='edit' onPress={addImage} />
 
                             {/* Profile Name and Bio */}
                             <View style={styles.nameAndBioView}>
@@ -160,7 +162,7 @@ export default function ProfileScreen1() {
                                         />
                                     </View>
 
-                                    <View style={styles.searchSection}>
+                                   {login_by != 'App' ? null : <View style={styles.searchSection}>
                                         <TextInput
                                             style={styles.input}
                                             placeholder="Senha"
@@ -169,7 +171,8 @@ export default function ProfileScreen1() {
                                             editable={disable_field}
 
                                         />
-                                    </View>
+                                    </View>}
+                                    
 
                                     <View style={styles.searchSection}>
                                         <TextInput

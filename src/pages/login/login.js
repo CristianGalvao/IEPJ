@@ -16,7 +16,7 @@ import logoGoogle from './google.jpg';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {BASE_URL} from '../../config/config'
+import { BASE_URL } from '../../config/config'
 
 export default function Login({ navigation }) {
 
@@ -38,15 +38,15 @@ export default function Login({ navigation }) {
 
         let json = await response.json();
 
-        if(json == 'user_not_found'){
+        if (json == 'user_not_found') {
             Alert.alert("Erro", "Usuário não encontrado")
         }
 
-        if(json == "verify_email"){
+        if (json == "verify_email") {
             Alert.alert("Por favor", "Verifique seu e-mail")
         }
-        
-        if(json == 'error_login'){
+
+        if (json == 'error_login') {
             Alert.alert("Erro", "Verifique sua senha")
         }
 
@@ -68,13 +68,33 @@ export default function Login({ navigation }) {
         await GoogleSignin.hasPlayServices();
         const { idToken } = await GoogleSignin.signIn();
         const userInfo = await GoogleSignin.signIn();
-        console.log(userInfo.user)
+        // console.log(userInfo.user)
         // Create a Google credential with the token
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
         let json = userInfo.user;
-        
+
+        console.log(userInfo.user.email, userInfo.user.givenName)
+
+        async function Register_Google() {
+            await fetch(`${BASE_URL}/user/create_user`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: userInfo.user.email,
+                    photo: userInfo.user.photo,
+                    name: userInfo.user.givenName,
+                    status: true,
+                    login_by: 'Google'
+                }),
+            });
+        }
+
         await AsyncStorage.setItem('data_user', JSON.stringify(json));
-        navigation.navigate('tabbar')
+        Register_Google()
+        await navigation.navigate('tabbar')
         // Sign-in the user with the credential
         return auth().signInWithCredential(googleCredential);
 

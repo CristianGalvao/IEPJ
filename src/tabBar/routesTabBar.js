@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 //Importando as telas
 import Store from "../pages/home/store/store";
-// import Profile from "../pages/home/profile/profile";
 import Config_Screen from "../pages/home/config_screen/config_screen";
 import Events from "../pages/home/Events/events";
 import Home from "../pages/home/home/home";

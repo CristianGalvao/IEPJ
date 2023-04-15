@@ -21,9 +21,9 @@ export default StyleSheet.create({
     my_data: {
         width: '100%',
         height: '15%',
-        backgroundColor: 'white',
-        borderColor: 'red',
-        borderWidth: 1,
+        backgroundColor: 'black',
+        borderColor: 'grey',
+        borderWidth: 2,
         borderRadius: 25,
         marginTop: '25%',
         display: 'flex',
@@ -34,21 +34,25 @@ export default StyleSheet.create({
 
     user_settings: {
         width: '100%',
+        borderColor: 'grey',
+        borderWidth: 2,
         height: '15%',
         borderRadius: 25,
         marginTop: '10%',
-        borderColor: 'red',
-        borderWidth: 1,
         borderRadius: 25,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        backgroundColor: 'black'
     },
 
     txt_title_button:{
-        color: 'black',
+        color: 'white',
         fontSize: 16,
-        fontWeight: 'bold'
+        width: '100%',
+        marginLeft: 0,
+        marginLeft: 20,
+        fontWeight: 'bold',
     }
 })

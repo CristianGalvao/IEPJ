@@ -45,7 +45,10 @@ export default function Register({ navigation }) {
                 name: name,
                 password: password,
                 cpf: cpf,
-                whatssap: telefone
+                whatssap: telefone,
+                status: false,
+                photo: 'https://freesvg.org/img/abstract-user-flat-4.png',
+                login_by: "App"
             }),
         });
 
