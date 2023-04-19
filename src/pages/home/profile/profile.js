@@ -32,57 +32,81 @@ export default function ProfileScreen1() {
     const [disable_field, setDisableField] = useState(false);
     const [login_by, setLoginBy] = useState();
 
+    async function get_user_by_login() {
+
+        const value = await AsyncStorage.getItem('data_user');
+        let json = JSON.parse(value);
+        setName_user(json.name)
+        setEmail(json.email)
+        setPassword(json.password)
+        setCpf(json.cpf);
+        setTelefone(json.whatssap);
+        setLoginBy(json.login_by)
+    }
+
+    async function get_photo_profile() {
+
+        get_user_by_login()
+
+        let response = await fetch(`${BASE_URL}/user/get_url_photo/${email}`)
+            .then(res => res.json())
+            .then(
+                res => {
+                    setImage(res.photo)
+                })
+    }
+
+    useEffect(
+        () => {
+            get_user_by_login();
+            get_photo_profile();
+        }
+    )
+
+
     function show_button_save() {
         setButton_save(!button_save)
         setDisableField(!disable_field)
     }
 
-    useEffect(
-        () => {
-            async function get_user_by_login() {
 
-                const value = await AsyncStorage.getItem('data_user');
-                let json = JSON.parse(value);
-                await setImage(json.photo)
-                setName_user(json.name)
-                setEmail(json.email)
-                setPassword(json.password)
-                setCpf(json.cpf);
-                setTelefone(json.whatssap);
-                setImage(json.photo)
-                setLoginBy(json.login_by)
-            }
-            get_user_by_login();
-        }, [image]);
+    async function update_photo(image) {
 
-  
+        get_user_by_login()
 
-    const addImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        setImage(result.uri)
-
-        fetch(`${BASE_URL}/user/update_photo/${email}/${image}`, {
+        await fetch(`${BASE_URL}/user/update_photo`, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                email: email,
                 photo: image
-            }),
+            })
         });
-    };
+    }
+
+        const addImage = async () => {
+
+            // No permissions request is necessary for launching the image library
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1,
+            });
+
+            if (!result.cancelled) {
+                setImage(result.uri);
+                update_photo(result.uri)
+            }
+        };
 
 
     async function update_fields() {
-        fetch(BASE_URL, {
-            method: 'POST',
+        fetch(`${BASE_URL}`, {
+            method: 'PUT',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
@@ -112,13 +136,13 @@ export default function ProfileScreen1() {
                             {/* Profile Image */}
                             <View style={styles.profileImageView}>
 
-                            <Image
-                                        style={styles.profileImage}
-                                        source={{
-                                            uri: image,
-                                        }}
-                                    />
-                                
+                                <Image
+                                    style={styles.profileImage}
+                                    source={{
+                                        uri: image,
+                                    }}
+                                />
+
 
                             </View>
 
@@ -162,17 +186,17 @@ export default function ProfileScreen1() {
                                         />
                                     </View>
 
-                                   {login_by != 'App' ? null : <View style={styles.searchSection}>
+                                   {disable_field == true && login_by == 'App' ?  <View style={styles.searchSection}>
                                         <TextInput
                                             style={styles.input}
-                                            placeholder="Senha"
+                                            placeholder="Nova senha"
                                             onChangeText={(searchString) => { this.setState({ searchString }) }}
                                             underlineColorAndroid="transparent"
                                             editable={disable_field}
 
                                         />
-                                    </View>}
-                                    
+                                    </View> : null} 
+
 
                                     <View style={styles.searchSection}>
                                         <TextInput
