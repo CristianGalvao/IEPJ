@@ -7,7 +7,7 @@ export default StyleSheet.create({
     },
     view_img: {
         width: '100%',
-        height: '50%',
+        height: '45%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -37,7 +37,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 15
+        marginTop: 25
     },
     block_cultos2: {
         width: '95%',
