@@ -95,7 +95,7 @@ export default StyleSheet.create({
     backgroundColor: 'red',
     marginBottom: '10%',
     borderRadius: 20,
-    padding: 10,
+    padding: 5,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'

@@ -4,7 +4,8 @@ const app = express();
 const dotenv = require('dotenv');
 dotenv.config();
 
-const email = require("./email/send_email")
+const email = require("./email/send_email");
+
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
